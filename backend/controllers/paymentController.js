@@ -104,13 +104,26 @@ const confirmStripePayment = async (req, res) => {
 
 const createStripeCheckoutSession = async (req, res) => {
   try {
+    const { OrderId } = req.body;
+
+    // Siparişi veritabanından al
+    const order = await db.Order.findOne({
+      where: { id: OrderId },
+    });
+
+    if (!order) {
+      return res.status(404).json({ message: "Sipariş bulunamadı" });
+    }
+
     const successUrl = `${
       process.env.FRONTEND_URL || "http://localhost:5173"
     }/payment?status=success`;
+
     const cancelUrl = `${
       process.env.FRONTEND_URL || "http://localhost:5173"
     }/payment?status=failure`;
 
+    // 💡 Dinamik olarak sipariş tutarını unit_amount olarak belirle
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ["card"],
       line_items: [
@@ -118,9 +131,9 @@ const createStripeCheckoutSession = async (req, res) => {
           price_data: {
             currency: "try",
             product_data: {
-              name: `Orders`,
+              name: `Sipariş ${order.id}`,
             },
-            unit_amount: Math.round(100 * 100),
+            unit_amount: Math.round(order.total * 100), // 📌 Toplam tutar kuruş cinsinden gönderiliyor
           },
           quantity: 1,
         },
@@ -139,7 +152,6 @@ const createStripeCheckoutSession = async (req, res) => {
     });
   }
 };
-
 const getStripePaymentHistory = async (req, res) => {
   try {
     const userId = req.user.id;

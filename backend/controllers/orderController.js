@@ -62,14 +62,15 @@ const getUserOrder = async (req, res) => {
       return res.status(401).send("No token provided");
     }
 
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    console.log("Decoded token payload:", decoded);
-
-    // Add type check before parsing
-    if (!decoded.id || isNaN(Number(decoded.id))) { 
-      return res.status(400).send(`Invalid UserId: ${decoded.id}`);
+    try {
+      const decoded = jwt.verify(token, process.env.JWT_SECRET);
+      console.log("Decoded Token:", decoded); // Eğer burası çalışmazsa sorun JWT'de
+      req.userId = decoded.userId;
+    } catch (err) {
+      console.error("JWT Hatası:", err.message);
+      return res.status(401).json({ msg: "Invalid token", error: err.message });
     }
-
+    
     const userId =
       typeof decoded.id === "string" ? parseInt(decoded.id, 10) : decoded.id;
     console.log("Parsed userId:", userId);

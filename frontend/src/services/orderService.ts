@@ -11,7 +11,7 @@ export const createOrder = async (orderData: Partial<Order>) => {
     //orderUser: `${BASE_URL}/order/user`,
     export const getOrders = async () => {
       const response = await apiRequest<Order[]>("GET", "/order/user");
-      console.log("getOrders", response.data);
+      console.log("getOrdersmndsflgdkskgskjkfd", response.data);
       return response.data;
     };
      
