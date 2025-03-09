@@ -54,26 +54,18 @@ const createOrder = async (req, res) => {
 };
 
 const getUserOrder = async (req, res) => {
+  console.log("beyza")
   try {
+    console.log("beyza1")
     const token = req.header("x-auth-token");
     console.log("Token:", token);
 
     if (!token) {
       return res.status(401).send("No token provided");
-    }
-
-    try {
-      const decoded = jwt.verify(token, process.env.JWT_SECRET);
-      console.log("Decoded Token:", decoded); // Eğer burası çalışmazsa sorun JWT'de
-      req.userId = decoded.userId;
-    } catch (err) {
-      console.error("JWT Hatası:", err.message);
-      return res.status(401).json({ msg: "Invalid token", error: err.message });
-    }
+    }    
     
-    const userId =
-      typeof decoded.id === "string" ? parseInt(decoded.id, 10) : decoded.id;
-    console.log("Parsed userId:", userId);
+    const userId = req.userId;
+    console.log("User ID:", userId);
 
     if (isNaN(userId)) {
       return res.status(400).send("Invalid User ID");

@@ -40,6 +40,7 @@ export const AddressProvider: React.FC<{ children: React.ReactNode }> = ({ child
 
         if (currentUser) {
           const userAddresses = await getAddressesByUserId(currentUser.id);
+          console.log("userAddresses",userAddresses);
           setAddresses(userAddresses);
 
           if (userAddresses.length > 0) {
@@ -65,6 +66,7 @@ export const AddressProvider: React.FC<{ children: React.ReactNode }> = ({ child
       const newAddress = await createAddress(address);
       setAddresses(prev => [...prev, newAddress]);
       setSelectedAddress(newAddress);
+      fetchAddresses();
       return newAddress;
     } catch (err) {
       setError('Failed to add address');
@@ -73,7 +75,7 @@ export const AddressProvider: React.FC<{ children: React.ReactNode }> = ({ child
     } finally {
       setLoading(false);
     }
-  }, []);
+  }, [fetchAddresses]);
 
   // Update an existing address
   const updateExistingAddress = useCallback(async (id: number, addressData: Partial<Address>) => {
@@ -84,9 +86,9 @@ export const AddressProvider: React.FC<{ children: React.ReactNode }> = ({ child
       setAddresses(prev =>
         prev.map(addr => addr.id === id ? updatedAddress : addr)
       );
-
       if (selectedAddress?.id === id) {
         setSelectedAddress(updatedAddress);
+        fetchAddresses();
       }
     } catch (err) {
       setError('Failed to update address');
@@ -94,7 +96,7 @@ export const AddressProvider: React.FC<{ children: React.ReactNode }> = ({ child
     } finally {
       setLoading(false);
     }
-  }, [selectedAddress]);
+  }, [fetchAddresses, selectedAddress?.id]);
 
   const removeAddress = useCallback(async (id: number) => {
     setLoading(true);
@@ -102,6 +104,7 @@ export const AddressProvider: React.FC<{ children: React.ReactNode }> = ({ child
     try {
       await deleteAddress(id);
       setAddresses(prev => prev.filter(addr => addr.id !== id));
+      fetchAddresses(); 
 
       // If the selected address is deleted, select a new one
       if (selectedAddress?.id === id) {
@@ -113,8 +116,7 @@ export const AddressProvider: React.FC<{ children: React.ReactNode }> = ({ child
     } finally {
       setLoading(false);
     }
-  }, [selectedAddress, addresses]);
-
+  }, [selectedAddress, addresses,fetchAddresses]);
   // Select an address
   const selectAddress = useCallback((address: Address) => {
     setSelectedAddress(address);

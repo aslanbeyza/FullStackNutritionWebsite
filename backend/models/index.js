@@ -10,7 +10,7 @@ const sequelize = new Sequelize(
     host: process.env.DB_SERVER, 
     port: process.env.DB_PORT || 1433,
     dialect: "mssql",
-    logging: console.log, 
+    logging: false, 
     dialectOptions: {
       options: {
         encrypt: false,

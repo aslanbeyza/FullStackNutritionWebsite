@@ -11,17 +11,15 @@ const productRoutes = require('./product');
 const reviewRoutes = require('./review');
 const userRoutes = require('./user');
 
-
-
 router.use('/address', addressRoutes);
-router.use('/auth', authRoutes);  /* testi okey */
-router.use('/category', categoryRoutes);  /* testi okey */
-router.use('/order', orderRoutes);   /*okey  */
-router.use('/orderItem', orderItemRoutes);  /*okey  */
+router.use('/auth', authRoutes); 
+router.use('/category', categoryRoutes); 
+router.use('/order', orderRoutes);  
+router.use('/orderItem', orderItemRoutes); 
 router.use('/payment', paymentRoutes);
-router.use('/priceInfo', priceInfoRoutes);/* testi okey */
-router.use('/product', productRoutes);/* testi okey */
+router.use('/priceInfo', priceInfoRoutes);
+router.use('/product', productRoutes);
 router.use('/review', reviewRoutes);
-router.use('/user', userRoutes);/* testi okey */
+router.use('/user', userRoutes);
 
 module.exports = router;

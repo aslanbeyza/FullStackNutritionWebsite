@@ -34,15 +34,11 @@ const steps = [
 
 export default function VerticalLinearStepper() {
   const [activeStep, setActiveStep] = React.useState(0);
-  const [selectedAddress, setSelectedAddress] = React.useState<Address | null>(
-    null
-  );
+  const [selectedAddress, setSelectedAddress] = React.useState<Address | null>(null);
   const [orderResponse, setOrderResponse] = React.useState<OrderItem>();
   const { cartItems, getTotalPrice } = useShoppingCart();
   const location = useLocation(); // useLocation ile URL parametrelerini alıyoruz
-  const [paymentStatus, setPaymentStatus] = React.useState<
-    "idle" | "success" | "failure"
-  >("idle");
+  const [paymentStatus, setPaymentStatus] = React.useState<"idle" | "success" | "failure">("idle");
 
   React.useEffect(() => {
     const queryParams = new URLSearchParams(location.search);
@@ -102,19 +98,18 @@ export default function VerticalLinearStepper() {
         width: "100%",
         height: "calc(100vh - 120px)", // Header için alan bırakıyoruz
         overflowY: "auto",
-        px: 4, // Yanlarda padding
+        px: 15, // Yanlarda padding
       }}
     >
       <Stepper
         activeStep={activeStep}
         orientation="vertical"
         sx={{
-          width: "100%",
+          width: "70%",
           "& .MuiStep-root": {
-            mb: 3, // Her adım arasında boşluk
             "& .MuiStepLabel-root": {
               p: 2,
-              border: "1px solid #e0e0e0",
+              border: "1px solid #d61c1c",
               borderRadius: 1,
               bgcolor: "white",
             },
