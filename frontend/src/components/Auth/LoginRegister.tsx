@@ -45,12 +45,21 @@ const LoginRegister: React.FC = () => {
   // E-posta doğrulandıysa bildirim göster
   useEffect(() => {
     const params = new URLSearchParams(location.search);
-    if (params.get("verified") === "true") {
-      toast.success(
-        "E-posta başarıyla doğrulandı! Şimdi giriş yapabilirsiniz."
-      );
+    const token = params.get("token");
+  
+    if (token) {
+      verifyEmail(token)
+        .then(() => {
+          toast.success("E-posta başarıyla doğrulandı! Şimdi giriş yapabilirsiniz.");
+          navigate("/login", { replace: true }); // Sayfayı temizle
+        })
+        .catch((error) => {
+          console.error("Doğrulama hatası:", error);
+          toast.error("E-posta doğrulaması başarısız oldu.");
+        });
     }
-  }, [location]);
+  }, [location, navigate]);
+  
 
   const handleChange = (_event: React.SyntheticEvent, newValue: number) => {
     setTabValue(newValue);

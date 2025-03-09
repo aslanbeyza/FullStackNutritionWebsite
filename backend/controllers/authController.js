@@ -2,7 +2,7 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const { validationResult } = require("express-validator");
 const db = require("../models");
-const sendVerificationEmail = require("../utils/emailUtils"); // utils/emailUtils.js dosyasını doğru yoldan import edin
+const sendVerificationEmail = require("../utils/emailUtils");
 
 const register = async (req, res) => {
   const errors = validationResult(req);
@@ -47,6 +47,7 @@ const register = async (req, res) => {
 };
 
 const login = async (req, res) => {
+
   const { email, password } = req.body;
 
   try {
@@ -73,6 +74,7 @@ const login = async (req, res) => {
     res.status(500).send("Server error");
   }
 };
+
 const me = async (req, res) => {
   const token = req.header("x-auth-token");
 
@@ -94,6 +96,7 @@ const me = async (req, res) => {
         name: user.name,
         email: user.email,
         lastName: user.lastName,
+
       },
     });
   } catch (err) {
@@ -103,13 +106,16 @@ const me = async (req, res) => {
 
 const verifyEmail = async (req, res) => {
   try {
-    const { token } = req.body;
+    const { token } = req.query; //tokenı url den alıcaz 
+    console.log("Gelen token auth :", token); 
 
     if (!token) {
       return res.status(400).json({ message: "Token is required" });
     }
 
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    console.log("Çözülen token:", decoded);
+     
     const user = await db.User.findByPk(decoded.id);
     console.log("first", user);
     if (!user) {

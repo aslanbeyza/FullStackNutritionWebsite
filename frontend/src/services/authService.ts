@@ -24,8 +24,10 @@ export const register = async (userData: User) => {
 
 // E-posta doğrulama fonksiyonu
 export const verifyEmail = async (token: string) => {
-  return await apiRequest("POST", "/auth/verifyEmail", { token });
+  console.log("verifyEmail fonksiyonu çalıştı", `/auth/verifyEmail?token=${token}`);
+  return await apiRequest("GET", `/auth/verifyEmail?token=${token}`);
 };
+
 
 // Kullanıcı bilgilerini almak için me servisi
 export const getCurrentUser = async () => {

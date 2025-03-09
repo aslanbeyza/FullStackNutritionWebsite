@@ -4,6 +4,7 @@ import CategoryProductsPage from './components/Categories/CategoryProductsPage';
 import { ShoppingCartProvider } from './context/ShoppingCartContext';
 import { About,Account,Contact,Homepage,Page404,Payment,SSS,Login,ProductList,Detail,} from './pages'; 
 import { AddressProvider } from './context/AddressContext';
+import VerifyEmail from './pages/VerifyEmail';
 
 const AppRouter = () => {
   return (
@@ -14,6 +15,7 @@ const AppRouter = () => {
                 <Route path="/" element={<MainLayout><Homepage /></MainLayout>} />
                 <Route path="/about" element={<MainLayout><About /></MainLayout>} />
                 <Route path="/login" element={<MainLayout><Login/></MainLayout>} />
+                <Route path="/verify" element={<MainLayout><VerifyEmail/></MainLayout>} />
                 <Route path="/contact" element={<MainLayout><Contact /></MainLayout>} />
                 <Route path="/account" element={<MainLayout><Account /></MainLayout>} />
                 <Route path="/payment" element={<Payment />} />

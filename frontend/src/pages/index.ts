@@ -8,3 +8,4 @@ export { default as SSS } from './SSS';
 export { default as Login } from './Login';
 export { default as ProductList } from './ProductList';
 export { default as Detail } from './Detail';
+export { default as VerifyEmail } from './VerifyEmail';
