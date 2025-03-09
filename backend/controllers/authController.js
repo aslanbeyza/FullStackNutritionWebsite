@@ -63,7 +63,6 @@ const login = async (req, res) => {
     if (!isMatch) {
       return res.status(400).json({ msg: "Invalid credentials" });
     }
-    const payload = { userId: user.id };
     const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET, {
       expiresIn: "1h",
     });
@@ -117,7 +116,7 @@ const verifyEmail = async (req, res) => {
     console.log("Çözülen token:", decoded);
      
     const user = await db.User.findByPk(decoded.id);
-    console.log("first", user);
+    console.log("first", decoded.id);
     if (!user) {
       return res.status(400).json({ message: "Invalid token" });
     }

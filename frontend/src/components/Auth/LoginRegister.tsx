@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 // src/pages/auth/LoginRegister.tsx
 import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
@@ -45,7 +46,7 @@ const LoginRegister: React.FC = () => {
   // E-posta doğrulandıysa bildirim göster
   useEffect(() => {
     const params = new URLSearchParams(location.search);
-    const token = params.get("token");
+    const token = params.get("x-auth-token");
   
     if (token) {
       verifyEmail(token)
@@ -115,16 +116,20 @@ const LoginRegister: React.FC = () => {
         password: formData.password,
       });
       Cookies.set("x-auth-token", response?.data?.token);
+  
+      // E-posta doğrulaması yapılmış mı kontrol et
       try {
         await verifyEmail(response?.data?.token);
-        toast.success("Token başarıyla doğrulandı!");
-      } catch (error) {
-        console.error("Doğrulama hatası:", error);
-        toast.error("E mail doğrulaması başarısız oldu.");
+        toast.success("Giriş başarılı!");
+        navigate("/");
+      } catch (error: any) {
+        if (error.response?.data?.message === "User already verified") {
+          toast.success("E-posta zaten doğrulanmış. Giriş yapabilirsiniz.");
+          navigate("/");
+        } else {
+          toast.error("E-posta doğrulaması yapılmamış. Lütfen e-postanızı kontrol edin ve doğrulama linkine tıklayın.");
+        }
       }
-
-      navigate("/");
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
       setError(
         error.response?.data?.message || "Giriş sırasında bir hata oluştu"
@@ -132,7 +137,6 @@ const LoginRegister: React.FC = () => {
       console.error("Giriş hatası:", error);
     }
   };
-
   return (
     <Container
       maxWidth="sm"
