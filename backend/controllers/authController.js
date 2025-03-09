@@ -47,7 +47,6 @@ const register = async (req, res) => {
 };
 
 const login = async (req, res) => {
-
   const { email, password } = req.body;
 
   try {
@@ -96,7 +95,6 @@ const me = async (req, res) => {
         name: user.name,
         email: user.email,
         lastName: user.lastName,
-
       },
     });
   } catch (err) {
@@ -106,8 +104,8 @@ const me = async (req, res) => {
 
 const verifyEmail = async (req, res) => {
   try {
-    const { token } = req.query; //tokenı url den alıcaz 
-    console.log("Gelen token auth :", token); 
+    const { token } = req.query; //tokenı url den alıcaz
+    console.log("Gelen token auth :", token);
 
     if (!token) {
       return res.status(400).json({ message: "Token is required" });
@@ -115,8 +113,8 @@ const verifyEmail = async (req, res) => {
 
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
     console.log("Çözülen token:", decoded);
-     
-    const user = await db.User.findByPk(decoded.id);
+
+    const user = await db.User.findByPk(decoded.userId);
     console.log("first", user);
     if (!user) {
       return res.status(400).json({ message: "Invalid token" });
@@ -125,7 +123,6 @@ const verifyEmail = async (req, res) => {
     if (user.isVerified) {
       return res.status(400).json({ message: "User already verified" });
     }
-
     await db.User.update({ isVerified: true }, { where: { id: user.id } });
 
     return res.status(200).json({ message: "Email verified successfully" });
